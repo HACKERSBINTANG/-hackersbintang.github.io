@@ -3,10 +3,12 @@
 <head>
 <title>Scrapbook Valentine</title>
 
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
 <style>
 body{
 margin:0;
-height:100vh;
+min-height:100vh;
 display:flex;
 justify-content:center;
 align-items:center;
@@ -21,10 +23,11 @@ body.night{
 background:radial-gradient(circle at center,#1a0026,#000814);
 }
 
-/* Buku Glow Pulse */
+/* Buku Responsive */
 .book{
-width:360px;
-height:520px;
+width:90vw;              /* mengikuti lebar layar */
+max-width:420px;         /* batas maksimal di layar besar */
+aspect-ratio:3/4;        /* rasio buku */
 position:relative;
 perspective:1500px;
 animation:glowPulse 4s ease-in-out infinite alternate;
@@ -78,7 +81,6 @@ border-radius:10px;
 margin-top:10px;
 color:black;
 font-weight:bold;
-text-shadow:none;
 }
 
 .controls{
