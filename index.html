@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Scrapbook Valentine</title>
+
+<style>
+body {
+  margin: 0;
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background: linear-gradient(135deg,#ffe6f0,#e6f7ff);
+  overflow: hidden;
+  font-family: cursive;
+}
+
+/* Buku */
+.book {
+  width: 380px;
+  height: 520px;
+  perspective: 1200px;
+  position: relative;
+}
+
+.page {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  background: white;
+  border-radius: 15px;
+  box-shadow: 0 0 20px rgba(255,105,180,.6);
+  transform-origin: left;
+  transition: transform 0.8s;
+  padding: 15px;
+  box-sizing: border-box;
+  text-align: center;
+}
+
+/* Sampul */
+.cover {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 28px;
+  color: #ff4da6;
+  text-shadow: 0 0 10px pink;
+}
+
+/* Foto */
+.page img {
+  width: 100%;
+  height: 75%;
+  object-fit: cover;
+  border-radius: 10px;
+}
+
+.note {
+  margin-top: 10px;
+  color: #ff4da6;
+  font-size: 18px;
+}
+
+/* Glow */
+.book {
+  animation: glow 2s infinite alternate;
+}
+
+@keyframes glow {
+  from { box-shadow: 0 0 10px #ff99cc; }
+  to { box-shadow: 0 0 30px #ff4da6; }
+}
+
+/* Tombol */
+.controls {
+  position: absolute;
+  bottom: -50px;
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+}
+
+button {
+  background: #ff4da6;
+  border: none;
+  color: white;
+  font-size: 22px;
+  padding: 8px 14px;
+  border-radius: 50%;
+  cursor: pointer;
+}
+
+/* Efek jatuh */
+.fall {
+  position: fixed;
+  top: -20px;
+  animation: fall linear infinite;
+  pointer-events: none;
+}
+
+@keyframes fall {
+  to { transform: translateY(110vh); }
+}
+</style>
+</head>
+
+<body>
+
+<div class="book">
+
+<!-- Sampul depan -->
+<div class="page cover">💖 Happy Valentine 💖</div>
+
+<!-- Isi foto -->
+<div class="page"><img src="foto1.jpg"><div class="note">Kenangan 1</div></div>
+<div class="page"><img src="foto2.jpg"><div class="note">Kenangan 2</div></div>
+<div class="page"><img src="foto3.jpg"><div class="note">Kenangan 3</div></div>
+<div class="page"><img src="foto4.jpg"><div class="note">Kenangan 4</div></div>
+<div class="page"><img src="foto5.jpg"><div class="note">Kenangan 5</div></div>
+<div class="page"><img src="foto6.jpg"><div class="note">Kenangan 6</div></div>
+<div class="page"><img src="foto7.jpg"><div class="note">Kenangan 7</div></div>
+<div class="page"><img src="foto8.jpg"><div class="note">Kenangan 8</div></div>
+<div class="page"><img src="foto9.jpg"><div class="note">Kenangan 9</div></div>
+<div class="page"><img src="foto10.jpg"><div class="note">Kenangan 10</div></div>
+
+<!-- Sampul belakang -->
+<div class="page cover">⭐ The End ⭐</div>
+
+<!-- Tombol -->
+<div class="controls">
+<button onclick="prev()">◀</button>
+<button onclick="next()">▶</button>
+</div>
+
+</div>
+
+<script>
+const pages = document.querySelectorAll(".page");
+let index = 0;
+
+function showPage() {
+  pages.forEach((page, i) => {
+    if (i < index) {
+      page.style.transform = "rotateY(-180deg)";
+    } else {
+      page.style.transform = "rotateY(0deg)";
+    }
+  });
+}
+
+function next() {
+  if (index < pages.length) {
+    index++;
+    showPage();
+  }
+}
+
+function prev() {
+  if (index > 0) {
+    index--;
+    showPage();
+  }
+}
+
+/* Auto slideshow */
+setInterval(() => {
+  if (index < pages.length) next();
+}, 4000);
+
+showPage();
+</script>
+
+</body>
+</html>
