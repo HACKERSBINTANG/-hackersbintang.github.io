@@ -1,175 +1,292 @@
 <!DOCTYPE html>
-<html lang="id">
+<html>
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Album Kenangan</title>
+<title>Scrapbook Valentine</title>
 
 <style>
-*{
-    margin:0;
-    padding:0;
-    box-sizing:border-box;
-}
-
 body{
-    font-family:Arial, Helvetica, sans-serif;
-    background:linear-gradient(to right,#ff9a9e,#fad0c4);
-    display:flex;
-    justify-content:center;
-    align-items:center;
-    min-height:100vh;
+margin:0;
+height:100vh;
+display:flex;
+justify-content:center;
+align-items:center;
+background:radial-gradient(circle at center,#ffe6f2,#e6f7ff);
+overflow:hidden;
+font-family:cursive;
+transition:background 1s;
 }
 
-.container{
-    width:90%;
-    max-width:320px;
-    height:500px;
-    position:relative;
-    overflow:hidden;
-    border-radius:20px;
-    box-shadow:0 10px 30px rgba(0,0,0,0.3);
-    background:white;
+/* NIGHT MODE */
+body.night{
+background:radial-gradient(circle at center,#1a0026,#000814);
+}
+
+/* Buku Glow Pulse */
+.book{
+width:360px;
+height:520px;
+position:relative;
+perspective:1500px;
+animation:glowPulse 4s ease-in-out infinite alternate;
+}
+
+@keyframes glowPulse{
+from{ filter:drop-shadow(0 0 15px rgba(255,105,180,0.4)); }
+to{ filter:drop-shadow(0 0 35px rgba(255,105,180,0.8)); }
 }
 
 .page{
-    position:absolute;
-    width:100%;
-    height:100%;
-    display:flex;
-    flex-direction:column;
-    justify-content:center;
-    align-items:center;
-    opacity:0;
-    transform:scale(0.9);
-    transition:all 0.5s ease;
+position:absolute;
+width:100%;
+height:100%;
+border-radius:18px;
+padding:15px;
+box-sizing:border-box;
+text-align:center;
+transform-origin:left;
+transition:transform .8s;
+backface-visibility:hidden;
+background:white;
+box-shadow:0 0 25px rgba(255,105,180,0.4);
+}
+
+/* Zoom aktif */
+.page.active{
+animation:zoomIn 0.8s ease;
+}
+
+@keyframes zoomIn{
+from{transform:scale(.95);}
+to{transform:scale(1);}
+}
+
+.cover img{
+width:100%;
+height:100%;
+object-fit:cover;
+border-radius:10px;
 }
 
 .page img{
-    width:85%;
-    border-radius:15px;
-    margin-bottom:15px;
+width:100%;
+height:95%;
+object-fit:cover;
+border-radius:10px;
 }
 
-.page h3{
-    margin-top:10px;
-}
-
-.page.active{
-    opacity:1;
-    transform:scale(1);
+.note{
+margin-top:10px;
+color:black;
+font-weight:bold;
+text-shadow:none;
 }
 
 .controls{
-    position:absolute;
-    bottom:15px;
-    width:100%;
-    display:flex;
-    justify-content:space-between;
-    padding:0 20px;
-    z-index:10;
+position:absolute;
+bottom:-55px;
+width:100%;
+display:flex;
+justify-content:space-between;
 }
 
-.controls button{
-    background:#ff758c;
-    color:white;
-    border:none;
-    padding:8px 14px;
-    border-radius:10px;
-    cursor:pointer;
-    font-size:16px;
+button{
+background:linear-gradient(45deg,#ff4da6,#ff85c1);
+border:none;
+color:white;
+font-size:20px;
+padding:8px 14px;
+border-radius:50%;
+cursor:pointer;
+box-shadow:0 0 15px rgba(255,105,180,0.6);
+transition:.3s;
 }
 
-.music-btn{
-    position:absolute;
-    top:10px;
-    right:10px;
-    background:#ff758c;
-    color:white;
-    border:none;
-    padding:6px 10px;
-    border-radius:10px;
-    cursor:pointer;
-    z-index:10;
+button:hover{
+transform:scale(1.1);
+}
+
+.musicBtn{
+position:fixed;
+top:10px;
+right:10px;
+z-index:999;
+}
+
+/* Partikel */
+.fall{
+position:fixed;
+top:-20px;
+animation:fall linear infinite;
+pointer-events:none;
+}
+
+@keyframes fall{
+to{transform:translateY(110vh);}
+}
+
+/* Ending Overlay */
+.ending{
+position:fixed;
+inset:0;
+display:flex;
+justify-content:center;
+align-items:center;
+backdrop-filter:blur(10px);
+background:rgba(0,0,0,.4);
+color:white;
+font-size:26px;
+opacity:0;
+pointer-events:none;
+transition:1s;
+text-align:center;
+padding:20px;
+}
+
+.ending.show{
+opacity:1;
 }
 </style>
 </head>
 
 <body>
 
-<div class="container">
+<audio id="bgm" loop>
+<source src="musik.mp3" type="audio/mpeg">
+</audio>
 
-    <!-- Musik -->
-    <audio id="bgm" src="music.mp3" loop></audio>
-    <button class="music-btn" onclick="toggleMusic()">🎵</button>
+<button class="musicBtn" onclick="toggleMusic()">🎵</button>
+<button class="musicBtn" style="right:60px;" onclick="toggleNight()">🌙</button>
 
-    <!-- Slide 1 -->
-    <div class="page active">
-        <img src="foto1.jpg" alt="">
-        <h3>Kenangan 1</h3>
-    </div>
+<div class="book">
 
-    <!-- Slide 2 -->
-    <div class="page">
-        <img src="foto2.jpg" alt="">
-        <h3>Kenangan 2</h3>
-    </div>
+<!-- Cover Awal -->
+<div class="page cover">
+<img src="cover.jpg">
+</div>
 
-    <!-- Slide 3 -->
-    <div class="page">
-        <img src="foto3.jpg" alt="">
-        <h3>Kenangan 3</h3>
-    </div>
+<!-- Foto Kenangan -->
+<div class="page"><img src="foto1.jpg"><div class="note">Kenangan 1</div></div>
+<div class="page"><img src="foto2.jpg"><div class="note">Kenangan 2</div></div>
+<div class="page"><img src="foto3.jpg"><div class="note">Kenangan 3</div></div>
+<div class="page"><img src="foto4.jpg"><div class="note">Kenangan 4</div></div>
+<div class="page"><img src="foto5.jpg"><div class="note">Kenangan 5</div></div>
+<div class="page"><img src="foto6.jpg"><div class="note">Kenangan 6</div></div>
 
-    <!-- Tombol -->
-    <div class="controls">
-        <button onclick="prev()">◀</button>
-        <button onclick="next()">▶</button>
-    </div>
+<!-- Cover Penutup -->
+<div class="page cover">
+<img src="coverpenutup.jpg">
+</div>
+
+<div class="controls">
+<button onclick="prev()">◀</button>
+<button onclick="next()">▶</button>
+</div>
 
 </div>
 
-<script>
-let pages = document.querySelectorAll(".page");
-let index = 0;
+<div class="ending" id="ending">
+Terima kasih sudah jadi bagian cerita ini 💖
+</div>
 
-function showPage(i){
-    pages.forEach(p => p.classList.remove("active"));
-    pages[i].classList.add("active");
+<script>
+const pages=document.querySelectorAll(".page");
+
+pages.forEach((p,i)=>{
+p.style.zIndex=pages.length-i;
+});
+
+let index=0;
+
+function render(){
+pages.forEach((p,i)=>{
+p.style.transform = i<index
+? "rotateY(-180deg)"
+: "rotateY(0deg)";
+
+p.classList.remove("active");
+if(i===index) p.classList.add("active");
+});
+
+if(index===pages.length){
+document.getElementById("ending").classList.add("show");
+}else{
+document.getElementById("ending").classList.remove("show");
+}
+}
+
+function heartBurst(){
+for(let i=0;i<10;i++){
+const h=document.createElement("div");
+h.textContent="💖";
+h.style.position="fixed";
+h.style.left="50%";
+h.style.top="50%";
+h.style.fontSize="20px";
+h.style.pointerEvents="none";
+h.style.transition="1s";
+document.body.appendChild(h);
+
+setTimeout(()=>{
+h.style.transform=`translate(${(Math.random()-0.5)*200}px,
+${(Math.random()-0.5)*200}px) scale(1.5)`;
+h.style.opacity="0";
+},10);
+
+setTimeout(()=>h.remove(),1000);
+}
 }
 
 function next(){
-    index++;
-    if(index >= pages.length) index = 0;
-    showPage(index);
+if(index<pages.length){
+index++;
+heartBurst();
+render();
+}
 }
 
 function prev(){
-    index--;
-    if(index < 0) index = pages.length - 1;
-    showPage(index);
+if(index>0){
+index--;
+render();
+}
 }
 
-// Auto slide tiap 5 detik
 setInterval(()=>{
-    next();
-},5000);
+if(index<pages.length) next();
+},4000);
 
-// Musik
-let music = document.getElementById("bgm");
+function spawn(){
+const el=document.createElement("div");
+el.className="fall";
+el.textContent=Math.random()>.5?"💖":"✨";
+el.style.left=Math.random()*100+"vw";
+el.style.fontSize=15+Math.random()*20+"px";
+el.style.animationDuration=4+Math.random()*4+"s";
+el.style.textShadow="0 0 10px hotpink,0 0 20px pink";
+document.body.appendChild(el);
+setTimeout(()=>el.remove(),8000);
+}
+setInterval(spawn,500);
+
+const music=document.getElementById("bgm");
 
 function toggleMusic(){
-    if(music.paused){
-        music.play();
-    }else{
-        music.pause();
-    }
+if(music.paused){
+music.play();
+}else{
+music.pause();
+}
 }
 
-// Aktifkan musik setelah klik pertama (biar tidak diblokir browser)
 document.body.addEventListener("click",()=>{
-    music.play();
+music.play();
 },{once:true});
+
+function toggleNight(){
+document.body.classList.toggle("night");
+}
+
+render();
 </script>
 
 </body>
